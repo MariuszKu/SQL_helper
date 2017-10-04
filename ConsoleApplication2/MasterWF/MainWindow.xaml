@@ -1,0 +1,90 @@
+﻿<Window x:Class="MasterWF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MasterWF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="800" KeyDown="Window_KeyDown">
+
+        <Grid >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*">
+                </RowDefinition>
+                <RowDefinition Height="2*">
+                </RowDefinition>
+            </Grid.RowDefinitions>
+        <TextBox x:Name="tbSqlSource" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" AcceptsReturn="True"/>
+
+        <TreeView Name="trvMenu" Grid.Row="0" Grid.Column="0" KeyDown="trvMenu_KeyDown" SelectedValuePath="">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type local:Table}" ItemsSource="{Binding ColumnsList}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type local:HlpTable}" >
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Name}" />
+                        <TextBlock Text=" (" Foreground="Green" />
+                        <TextBlock Text="{Binding DataType}" Foreground="Green" />
+                        <TextBlock Text=")" Foreground="Green" />
+                    </StackPanel>
+                </DataTemplate>
+            </TreeView.Resources>
+
+        </TreeView>
+            <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+            <DataGrid  Grid.Column="0" Grid.Row="0" Name="DataGridSource">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="Type" Binding="{Binding DataType}" />
+                    <DataGridTextColumn Header="Dest Column" Binding="{Binding MapDestColumn}" />
+                    <DataGridCheckBoxColumn Header="Key" Binding="{Binding Key}"/>
+                    <DataGridTextColumn Header="Alias" Binding="{Binding Mapping}" />
+                    <DataGridTextColumn Header="Source Table" Binding="{Binding TableAlias}" />
+                    
+                    
+                </DataGrid.Columns>
+
+            </DataGrid>
+            <!--
+            <ListView x:Name="LVcolumns"  Grid.Column="0" Grid.Row="0" AllowDrop="True" MouseDoubleClick="LVcolumns_MouseDoubleClick" 
+                      >
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}" />
+                        <GridViewColumn Header="Type" DisplayMemberBinding="{Binding DataType}" />
+                        <GridViewColumn Header="Alias" DisplayMemberBinding="{Binding Mapping}" />
+                        <GridViewColumn Header="Source Table" DisplayMemberBinding="{Binding TableAlias}" />
+                        
+                    </GridView>
+                </ListView.View>
+            </ListView>
+                -->
+            <DataGrid Grid.Column="1" Grid.Row="0" Name="DataGrid">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}"/>
+                    <DataGridTextColumn Header="Type" Binding="{Binding DataType}"/>
+                    <DataGridCheckBoxColumn Header="Key" Binding="{Binding Key}"/>
+                </DataGrid.Columns>
+
+            </DataGrid>
+
+        </Grid >
+            
+            
+            
+    </Grid>
+</Window>

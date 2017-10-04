@@ -1,0 +1,14 @@
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\bin\Debug\SqlHelper.exe.config
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\bin\Debug\SqlHelper.exe
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\bin\Debug\SqlHelper.pdb
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\MainWindow.g.cs
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\App.g.cs
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\SqlHelper_MarkupCompile.cache
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\SqlHelper_MarkupCompile.lref
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\MainWindow.baml
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\SqlHelper.g.resources
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\SqlHelper.Properties.Resources.resources
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\SqlHelper.csproj.GenerateResource.Cache
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\SqlHelper.exe
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\SqlHelper.pdb
+C:\Users\MK\Desktop\ConsoleApplication2\SqlHelper\obj\Debug\SqlHelper.csprojResolveAssemblyReference.cache

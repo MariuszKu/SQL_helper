@@ -1,0 +1,14 @@
+﻿<Window x:Class="MasterWF.PropertyWin"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MasterWF"
+        mc:Ignorable="d"
+        Title="PropertyWin" Height="300" Width="300">
+    <Grid>
+        <DataGrid x:Name="dataGrid" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" RenderTransformOrigin="-2.511,-3.682" Height="110" Width="272"/>
+        <TextBox x:Name="textBox" HorizontalAlignment="Left" Height="105" Margin="10,125,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="272"/>
+        <Button x:Name="button" Content="Add" HorizontalAlignment="Left" Margin="10,238,0,0" VerticalAlignment="Top" Width="75" Click="button_Click"/>
+    </Grid>
+</Window>
