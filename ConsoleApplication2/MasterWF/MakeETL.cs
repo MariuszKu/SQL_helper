@@ -81,7 +81,7 @@ namespace MasterWF
             var r2 = result.ToList().Select(z => z.v2 != z.v3 && sc != SqlCommand.MergeInsert ? String.Format("{0} AS {1}", z.v3, z.v2) : String.Format("{0}", z.v2)).ToArray();
             var r3 = result.Where(z=> !z.key).ToList().Select(z => String.Format("{0} = sc.{1}", z.v1, z.v2)).ToArray();
             string descCols = String.Join(",", r1);
-            string selectCols = String.Join("\n,", r2);
+            string selectCols = String.Join("\n\t,", r2);
             string updateCols = String.Join("\n,", r3);
 
             switch (sc)
@@ -89,13 +89,13 @@ namespace MasterWF
                 case SqlCommand.MergeInsert:
                     return String.Format("INSERT ({0}) \n VALUES ({1}) ", descCols, selectCols);
                 case SqlCommand.Insert:    
-                    if (table.SqlDefinition == null)
-                       return String.Format("INSERT INTO {0} ({1}) \nSELECT {2} FROM {3}", descTable.Name, descCols, selectCols, table.Name);
+                    if (!table.Name.Contains("query"))
+                       return String.Format("TRUNCATE TABLE {0};\nINSERT INTO {0} ({1}) \nSELECT\n\t {2} \nFROM\n {3}", descTable.Name, descCols, selectCols, table.Name);
                     else
-                        return String.Format("INSERT INTO {0} ({1}) \nSELECT {2} FROM ({3}) A", descTable.Name, descCols, selectCols, table.SqlDefinition);
+                        return String.Format("TRUNCATE TABLE {0};\nINSERT INTO {0} ({1}) \nSELECT\n\t {2} \nFROM\n ({3}) A", descTable.Name, descCols, selectCols, table.SqlDefinition);
                 case SqlCommand.Select:
-                    if (table.SqlDefinition == null)
-                        return String.Format("SELECT {0} FROM {1}", selectCols, table.Name);
+                    if (!table.Name.Contains("query"))
+                        return String.Format("SELECT\n {0} \nFROM {1}", selectCols, table.Name);
                     else
                         return String.Format("SELECT {0} FROM ({1}) A", selectCols, table.SqlDefinition);
                 case SqlCommand.Update:
@@ -104,6 +104,21 @@ namespace MasterWF
                     return "";
 
             }
+        }
+
+        internal string SelectWithAliases()
+        {
+            string command = "SELECT \n";
+
+            foreach(var item in table.ColumnsList)
+            {
+                command += item.Name + ",\n";
+
+            }
+
+            command += "FROM " + table.SqlDefinition;
+
+            return command;
         }
 
         internal string createMerge()

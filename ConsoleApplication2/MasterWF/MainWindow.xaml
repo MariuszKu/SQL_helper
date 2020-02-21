@@ -7,17 +7,17 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="600" Width="800" KeyDown="Window_KeyDown">
 
-        <Grid >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="4*"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="2*">
-                </RowDefinition>
-                <RowDefinition Height="2*">
-                </RowDefinition>
-            </Grid.RowDefinitions>
+    <Grid >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="4*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*">
+            </RowDefinition>
+            <RowDefinition Height="2*">
+            </RowDefinition>
+        </Grid.RowDefinitions>
         <TextBox x:Name="tbSqlSource" Grid.Row="1" Grid.Column="1" TextWrapping="Wrap" AcceptsReturn="True"/>
 
         <TreeView Name="trvMenu" Grid.Row="0" Grid.Column="0" KeyDown="trvMenu_KeyDown" SelectedValuePath="">
@@ -38,7 +38,7 @@
             </TreeView.Resources>
 
         </TreeView>
-            <Grid Grid.Row="0" Grid.Column="1">
+        <Grid Grid.Row="0" Grid.Column="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
@@ -54,8 +54,8 @@
                     <DataGridCheckBoxColumn Header="Key" Binding="{Binding Key}"/>
                     <DataGridTextColumn Header="Alias" Binding="{Binding Mapping}" />
                     <DataGridTextColumn Header="Source Table" Binding="{Binding TableAlias}" />
-                    
-                    
+
+
                 </DataGrid.Columns>
 
             </DataGrid>
@@ -83,8 +83,9 @@
             </DataGrid>
 
         </Grid >
-            
-            
-            
+        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10,10,0,0" Grid.Row="1" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top" Height="265" Width="138"/>
+
+
+
     </Grid>
 </Window>

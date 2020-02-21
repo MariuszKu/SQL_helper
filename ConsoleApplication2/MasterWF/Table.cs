@@ -40,6 +40,7 @@ namespace MasterWF
         public List<Joins> JoinsList { get; set; }
         public string Name { get; set; }
         public string Alias { get; set; }
+        
         public ObservableCollection<HlpTable> ColumnsList { get; set; }
 
     }

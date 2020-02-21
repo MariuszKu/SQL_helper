@@ -49,17 +49,26 @@ namespace MasterWF
             Table t = new Table();
             t.ColumnsList = new ObservableCollection<HlpTable>();
             q = Regex.Match(q1, @"\(([\s\S]*)\)[^(]*$", RegexOptions.Multiline).Groups[1].Value;
-            t.Name = Regex.Match(q1, @"table\s+([a-z,0-9]+).*\n?.*\(", RegexOptions.Multiline | RegexOptions.IgnoreCase).Groups[1].Value;
+            t.Name = Regex.Match(q1, @"table\s+([a-z,0-9,\.,\[,\]]+).*\n?.*\(", RegexOptions.Multiline | RegexOptions.IgnoreCase).Groups[1].Value;
             var a = Regex.Split(q, @",(?![^\(]+\))");
             for (int i = 0; i < a.Length; i++)
             {
                 a[i] = a[i].Trim();
                 if (a[i].Length>0)
                 {
-                    var w = Regex.Split(a[i], @"\s(?![^\(]+\))(?![^\s][^\(]+\))");
+                    //var w = Regex.Split(a[i], @"\s(?![^\(]+\))(?![^\s][^\(]+\))",RegexOptions.IgnorePatternWhitespace);
+                    var w = a[i].Split(new String[] { " " }, StringSplitOptions.RemoveEmptyEntries);
                     var constraint = ArrayHelper.Contraint(w);
+                    if (w.Length > 2)
+                        if (w[2].StartsWith("("))
+                        {
+                            w[1] += w[2];
+                            w[2] = w[3];
+                        }
+                    w[0] = w[0].Replace("[", "").Replace("]", "");
                     key = constraint.ToUpper().Contains("PRIMARY KEY");
-                    t.ColumnsList.Add(new HlpTable { Name = w[0].ToUpper(), DataType = w[1].ToUpper(), Constrain = ArrayHelper.Contraint(w), Key = key, TableAlias = t.Name });
+                    if(!new String[] { "CONSTRAINT" }.Contains(w[0]))
+                        t.ColumnsList.Add(new HlpTable { Name = w[0].ToUpper(), DataType = w[1].ToUpper(), Constrain = ArrayHelper.Contraint(w), Key = key, TableAlias = t.Name });
                     key = false;
                 }
             }
@@ -84,10 +93,15 @@ namespace MasterWF
                 tablesWithDef = new List<string>();
                 string REGEX_MATCH_TABLE_NAME = @"(?<=(?:FROM|JOIN)[\s(]+)(?>\w+)(?=[\s)]*(?:\s+(?:AS\s+)?\w+)?(?:$|\s+(?:WHERE|ON|(?:LEFT|RIGHT)?\s+(?:(?:OUTER|INNER)\s+)?JOIN)))";
                 t.Name = "query-" +Regex.Match(q2, REGEX_MATCH_TABLE_NAME, RegexOptions.IgnoreCase | RegexOptions.Multiline).Groups[0].Value;
+
                 foreach(var item in Regex.Match(q2, REGEX_MATCH_TABLE_NAME, RegexOptions.IgnoreCase | RegexOptions.Multiline).Groups)
                 {
-                    tablesWithDef.Add(GetSelectTable.Where(z => z.Name == item.ToString()).First().Name);
+                    if(GetSelectTable.Count>0)
+                        if(GetSelectTable.Where(z => z.Name == item.ToString()).FirstOrDefault()!= null)
+                            tablesWithDef.Add(GetSelectTable.Where(z => z.Name == item.ToString()).First().Name);
                 }
+
+                t.SqlDefinition = q2;
 
                 var a = ArrayHelper.GetColumns(q2);
                 string[] arr = new string[a.Length];
@@ -100,11 +114,41 @@ namespace MasterWF
                     else
                     {
                         string mapname = calies[1].Split('.').Length > 1 ? calies[1].Split('.')[1] : calies[1];
-                        t.ColumnsList.Add(new HlpTable { Name = calies[0].Split('.')[1], Mapping = mapname, TableAlias = calies[0].Split('.')[0] });
+                        t.ColumnsList.Add(new HlpTable { Name = calies[0], Mapping = mapname, TableAlias = ArrayHelper.findAlias(calies[0]) });
                     }
                 }
                 this.GetSelectTable.Add(t);
             }
+        }
+
+        private string ExtractDef(string q2)
+        {
+
+            int i = 0;
+            int s = q2.ToUpper().IndexOf("FROM");
+            string txt = q2.Substring(s, q2.Length-s);
+            if (txt.Contains("openquery"))
+            {
+                i = txt.IndexOf("(");
+                int bracket = 0;
+                for (; i < txt.Length; i++)
+                {
+                    switch (txt[i])
+                    {
+                        case '(':
+                            bracket++;
+                            break;
+                        case ')':
+                            bracket--;
+                            break;
+
+
+                    }
+                    if (bracket == 0)
+                        break;
+                }
+            }
+            return txt.Substring(4, i+1);
         }
 
         /*public string GetSelect(bool? IgnoreChars)

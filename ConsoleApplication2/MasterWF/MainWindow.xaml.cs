@@ -55,16 +55,23 @@ Create table Desttest (id int,
                 
 
 ";
-            /*List<Table> t = new List<Table>();
 
-            Table t2 = new Table() { Name = "t1" };
-            t2.ColumnsList.Add(new HlpTable() { Name = "John Doe", DataType = "Varchar(20)" });
-            t2.ColumnsList.Add(new HlpTable() { Name = "Jane Doe", DataType = "Varchar(20)" });
-            t2.ColumnsList.Add(new HlpTable() { Name = "Sammy Doe", DataType = "Varchar(20)" });
-            t.Add(t2);
-            */
-            
 
+            textBlock.Text = @"f5 - parse queries\n
+f3 - set as dest
+f2 - set as source
+f4 - add alias
+f6 - 
+f7 - insert
+f8 - merge
+
+crt-1 - join based on name
+crt-2 - join based on position
+
+                ";
+
+            this.tbSqlSource.Focus();
+            this.tbSqlSource.Select(0, this.tbSqlSource.Text.Length);
 
 
         }
@@ -74,6 +81,9 @@ Create table Desttest (id int,
             MakeETL me = new MakeETL(SelectedTable, DestinationTable);
             switch (e.Key)
             {
+                case Key.F4:
+                    tbSqlSource.Text = me.SelectWithAliases();
+                    break;
                 case Key.F5:
                     sh = new SqlHelperWorker();
                     sh.ParseBatch(this.tbSqlSource.Text);

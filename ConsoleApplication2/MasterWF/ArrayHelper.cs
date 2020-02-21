@@ -17,15 +17,41 @@ namespace MasterWF
             return "";
         }
 
-        public static string[] GetColumns(string query){
+        public static string findAlias(string text)
+        {
+            int a = text.IndexOf('.');
+            if (a <= 0)
+                return text;
 
-            string[] arr = query.ToUpper().Split(',');
-            var t1 = arr[0];
-            arr[0] = t1.ToUpper().Replace("SELECT","").Replace("DISTINCT", "").Trim();
-            string tn = arr[arr.Length-1];
-            arr[arr.Length-1] = tn.Substring(0, tn.ToUpper().LastIndexOf("FROM"));
+            string workingtxt = text.Substring(0, a);
+            int bracket = 0;
+            int quote = 0;
 
-            return arr;
+            for (int i = a-1; i > 0; i--)
+            {
+                switch (workingtxt[i])
+                {
+                    case '(':
+                        return text.Substring(i+1, a - i-1);
+                    case ' ':
+                        return text.Substring(i + 1, a - i - 1);
+                    case '\t':
+                        return text.Substring(i + 1, a - i - 1);
+                    case '"':
+                        if(quote==1)
+                            return text.Substring(i+1, a - i-1);
+                        else
+                            quote++;
+                        break;
+                        
+
+
+                }
+
+            }
+
+            return text.Substring(0,a);
+
         }
 
         public static List<string> SplitAtPositions(string input, List<int> delimiterPositions)
@@ -54,13 +80,29 @@ namespace MasterWF
             return output;
         }
 
-        public static string[] GetColumnAndAlias(string column)
+        public static string[] GetColumns(string query)
+        {
+
+            string[] arr = GetColumnAndAlias(query,',');// query.ToUpper().Split(',');
+            var t1 = arr[0];
+            arr[0] = t1.ToUpper().Replace("SELECT", "").Replace("DISTINCT", "").Trim();
+            string tn = arr[arr.Length - 1];
+            int a = Array.FindIndex(arr, 0, x => x.ToUpper().Contains("FROM"));
+            String[] carr = new String[a + 1];
+            Array.Copy(arr, carr, a + 1);
+            carr[carr.Length - 1] = carr[carr.Length - 1].Substring(0, tn.ToUpper().LastIndexOf("FROM"));
+
+            return carr;
+        }
+
+        public static string[] GetColumnAndAlias(string column, char delimiter=' ')
         {
             
             column = column.Trim();
             List<int> l = new List<int>();
             int bracket = 0;
             int quote = 0;
+            int caseint = 0;
             for (int i = 0; i < column.Length; i++)
             {
                 switch (column[i])
@@ -77,8 +119,18 @@ namespace MasterWF
                         else
                             quote--;
                         break;
+                    case 'C':
+                        if(column.Length >= i+4)
+                            if (column.Substring(i, 4) == "CASE")
+                                caseint++;
+                        break;
+                    case 'E':
+                        if (column.Length >= i + 3)
+                            if (column.Substring(i-1, 4) == " END")
+                                caseint--;
+                        break;
                     default:
-                        if (bracket == 0 && quote == 0 && column[i] == ' ' )
+                        if (bracket == 0 && quote == 0 && caseint ==0 && column[i] == delimiter)
                         {
                             l.Add(i);
                         }
